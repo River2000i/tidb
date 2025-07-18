@@ -49,9 +49,12 @@ func (g *dmlPromptGenerator) GeneratePrompt(group string, count int, existCases 
 
     EXAMPLE INPUT:
     Return 3 random SQL queries using this operation: INSERT.
-    
+
     EXAMPLE JSON OUTPUT:
-    {"queries": ["CREATE TABLE t (id INT, name VARCHAR(25));INSERT INTO t VALUES (1, 'a');SELECT * FROM t ORDER BY id;DROP TABLE t;", "CREATE TABLE t (id INT, name VARCHAR(25));INSERT INTO t VALUES (NULL, 'b');SELECT * FROM t ORDER BY id;DROP TABLE t;", "CREATE TABLE t (id INT, name VARCHAR(25));INSERT INTO t VALUES (1, '\\n');SELECT * FROM t ORDER BY id;DROP TABLE t;"]}`
+    {"queries": [
+	"CREATE TABLE t (id INT, name VARCHAR(25));INSERT INTO t VALUES (1, 'a');SELECT * FROM t ORDER BY id;DROP TABLE t;",
+	"CREATE TABLE t (id INT, name VARCHAR(25));INSERT INTO t VALUES (NULL, 'b');SELECT * FROM t ORDER BY id;DROP TABLE t;",
+	"CREATE TABLE t (id INT, name VARCHAR(25));INSERT INTO t VALUES (1, '\\n');SELECT * FROM t ORDER BY id;DROP TABLE t;"]}`
 	messages = append(messages, openai.SystemMessage(systemPrompt))
 
 	userPromptTemplate := `Return %d random SQL queries using this operation: %s.`

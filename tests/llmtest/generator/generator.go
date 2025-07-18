@@ -93,6 +93,7 @@ func (g *TestCaseGenerator) generateTestSQLsForFunction(client *openai.Client, g
 		zap.Int("existCases", len(existCases)), zap.Int("generateCount", g.testCaseCount))
 
 	prompt := g.promptGenerator.GeneratePrompt(group, g.testCaseCount, existCases)
+	logger.Global.Info("prompt", zap.Any("prompt", prompt))
 	if prompt == nil {
 		return nil, errors.New("failed to generate prompt")
 	}
