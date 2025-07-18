@@ -113,12 +113,14 @@ func createVerifyCmd() *cobra.Command {
 				os.Exit(1)
 			}
 			defer tidb.Close()
+			logger.Global.Info("Open TiDB success")
 
 			mysql, err := sql.Open("mysql", unifyDSN(mysqlDSN))
 			if err != nil {
 				logger.Global.Error("Failed to open MySQL", zap.Error(err))
 				os.Exit(1)
 			}
+			logger.Global.Info("Open MySQL success")
 
 			caseManager.RunABTest(tidb, mysql, recheckPassed)
 			err = caseManager.Save()

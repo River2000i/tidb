@@ -73,6 +73,7 @@ func executeSQLsInDB(db *sql.DB, c *Case) (ret [][][]string, retErr error) {
 	allResults := make([][][]string, 0, len(allQueries))
 
 	for _, query := range allQueries {
+		logger.Global.Info("query", zap.String("query", query))
 		if len(query) == 0 {
 			continue
 		}
@@ -105,6 +106,7 @@ func (m *Manager) RunABTest(db1 *sql.DB, db2 *sql.DB, recheckPassed bool) {
 			logger := logger.Global.With(
 				zap.String("sql", c.SQL), zap.Any("args", c.Args),
 			)
+			logger.Info("case", zap.Any("case", c.SQL))
 			result1, err1 := executeSQLsInDB(db1, c)
 			result2, err2 := executeSQLsInDB(db2, c)
 

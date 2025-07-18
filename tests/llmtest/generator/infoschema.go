@@ -36,7 +36,7 @@ func (g *infoschemaGenerator) Name() string {
 func (g *infoschemaGenerator) Groups() []string {
 	return []string{
 		// scalar functions
-		"and", "cast", "<<", ">>", "or", ">=", "<=", "=", "!=", "<", ">", "+", "-", "&", "|", "%", "^", "/", "*", "not", "~", "div", "xor", "<=>", "+", "-", "in", "like", "case", "regexp", "regexp_like", "regexp_substr", "regexp_instr", "regexp_replace", "is", "row", "bit_count"}
+		"and", "cast", "or", ">=", "<=", "=", "!=", "<", ">", "|", "%", "not", "in", "like", "case"}
 }
 
 // GeneratePrompt implements PromptGenerator.GeneratePrompt
