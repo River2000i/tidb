@@ -1,444 +1,527 @@
 {
   "!=": [
     {
-      "sql": "CREATE DATABASE dbA DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE dbB CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE dbA.t1 (id INT PRIMARY KEY, name VARCHAR(30) NOT NULL, status ENUM('a','b','c') DEFAULT 'a', created_at DATETIME); CREATE TABLE dbA.t2 (col1 INT, col2 VARCHAR(20), INDEX idx_col2(col2)); CREATE TABLE dbB.x1 (x INT, y VARCHAR(10), INDEX idx_y(y)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_CHARACTER_SET_NAME != 'latin1' AND SCHEMA_NAME != 'mysql'; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA != 'dbB' AND TABLE_NAME != 'x1' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE dbB.x1; DROP TABLE dbA.t2; DROP TABLE dbA.t1; DROP DATABASE dbB; DROP DATABASE dbA;",
-      "args": null,
-      "pass": true,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME != 'mysql' AND DEFAULT_CHARACTER_SET_NAME != 'latin1'; DROP TABLE db1.t1; DROP DATABASE db1;",
+      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_CHARACTER_SET_NAME != 'latin1'; DROP DATABASE db2; DROP DATABASE db1;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_db DEFAULT CHARACTER SET utf8; CREATE TABLE test_db.users (id INT, username VARCHAR(20)); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA != 'information_schema' AND TABLE_TYPE != 'VIEW' ORDER BY TABLE_NAME; DROP TABLE test_db.users; DROP DATABASE test_db;",
+      "sql": "CREATE DATABASE test_db; CREATE TABLE test_db.t1 (id INT); CREATE TABLE test_db.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_db' AND TABLE_NAME != 't1'; DROP TABLE test_db.t2; DROP TABLE test_db.t1; DROP DATABASE test_db;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE dbA DEFAULT CHARACTER SET utf8mb4; CREATE DATABASE dbB CHARACTER SET latin1; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME != 'dbB' AND DEFAULT_CHARACTER_SET_NAME != 'utf8' ORDER BY SCHEMA_NAME; DROP DATABASE dbB; DROP DATABASE dbA;",
+      "sql": "CREATE DATABASE dbA CHARACTER SET utf8mb4; CREATE DATABASE dbB CHARACTER SET latin1; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_COLLATION_NAME != 'utf8mb4_bin'; DROP DATABASE dbB; DROP DATABASE dbA;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE temp_db; CREATE TABLE temp_db.temp1 (col1 INT); CREATE TABLE temp_db.temp2 (col2 VARCHAR(10)); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA != 'mysql' AND TABLE_NAME != 'temp1' ORDER BY TABLE_NAME; DROP TABLE temp_db.temp2; DROP TABLE temp_db.temp1; DROP DATABASE temp_db;",
+      "sql": "CREATE DATABASE mixed_case; CREATE TABLE mixed_case.T1 (id INT); CREATE TABLE mixed_case.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'mixed_case' AND TABLE_NAME != 'T1'; DROP TABLE mixed_case.t1; DROP TABLE mixed_case.T1; DROP DATABASE mixed_case;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_numbers CHARACTER SET utf8mb4; CREATE TABLE db_numbers.n1 (num INT); CREATE TABLE db_numbers.n2 (num INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA != 'db_numbers' OR TABLE_NAME != 'n1' ORDER BY TABLE_NAME; DROP TABLE db_numbers.n2; DROP TABLE db_numbers.n1; DROP DATABASE db_numbers;",
+      "sql": "CREATE DATABASE db_num; CREATE TABLE db_num.t1 (id INT); CREATE TABLE db_num.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_num' AND TABLE_NAME != 't3'; DROP TABLE db_num.t2; DROP TABLE db_num.t1; DROP DATABASE db_num;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_test1; CREATE DATABASE db_test2; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME != 'db_test1' AND SCHEMA_NAME NOT LIKE 'db_%' ORDER BY SCHEMA_NAME; DROP DATABASE db_test2; DROP DATABASE db_test1;",
+      "sql": "CREATE DATABASE db_enc DEFAULT ENCRYPTION='YES'; CREATE DATABASE db_no_enc DEFAULT ENCRYPTION='NO'; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_ENCRYPTION != 'YES'; DROP DATABASE db_no_enc; DROP DATABASE db_enc;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_compare CHARACTER SET latin1; CREATE TABLE db_compare.t1 (id INT); CREATE TABLE db_compare.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_compare' AND TABLE_NAME != 't1' ORDER BY TABLE_NAME; DROP TABLE db_compare.t2; DROP TABLE db_compare.t1; DROP DATABASE db_compare;",
+      "sql": "CREATE DATABASE db_tables; CREATE TABLE db_tables.t1 (id INT); CREATE TABLE db_tables.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_tables' AND TABLE_TYPE != 'VIEW'; DROP TABLE db_tables.t2; DROP TABLE db_tables.t1; DROP DATABASE db_tables;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_null_test; CREATE TABLE db_null_test.t_null (id INT, val VARCHAR(10)); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA != NULL AND TABLE_NAME != NULL ORDER BY TABLE_NAME; DROP TABLE db_null_test.t_null; DROP DATABASE db_null_test;",
+      "sql": "CREATE DATABASE db_charset1 CHARACTER SET utf8; CREATE DATABASE db_charset2 CHARACTER SET latin1; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_CHARACTER_SET_NAME != 'latin1'; DROP DATABASE db_charset2; DROP DATABASE db_charset1;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_special CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_special.`table-1` (id INT); CREATE TABLE db_special.`table-2` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_special' AND TABLE_NAME != 'table-1' ORDER BY TABLE_NAME; DROP TABLE db_special.`table-2`; DROP TABLE db_special.`table-1`; DROP DATABASE db_special;",
+      "sql": "CREATE DATABASE db_test; CREATE TABLE db_test.t1 (id INT); CREATE VIEW db_test.v1 AS SELECT * FROM db_test.t1; SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_test' AND TABLE_TYPE != 'BASE TABLE'; DROP VIEW db_test.v1; DROP TABLE db_test.t1; DROP DATABASE db_test;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_empty; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME != 'db_empty' AND SCHEMA_NAME != 'mysql' ORDER BY SCHEMA_NAME; DROP DATABASE db_empty;",
+      "sql": "CREATE DATABASE db_collate COLLATE utf8mb4_general_ci; CREATE DATABASE db_collate2 COLLATE utf8mb4_bin; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_COLLATION_NAME != 'utf8mb4_bin'; DROP DATABASE db_collate2; DROP DATABASE db_collate;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_engine; CREATE TABLE db_engine.t1 (id INT) ENGINE=InnoDB; CREATE TABLE db_engine.t2 (id INT) ENGINE=MyISAM; SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_engine' AND ENGINE != 'InnoDB'; DROP TABLE db_engine.t2; DROP TABLE db_engine.t1; DROP DATABASE db_engine;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_temp; CREATE TEMPORARY TABLE db_temp.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_temp' AND TABLE_TYPE != 'BASE TABLE'; DROP TABLE db_temp.t1; DROP DATABASE db_temp;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_comment; CREATE TABLE db_comment.t1 (id INT) COMMENT 'test table'; CREATE TABLE db_comment.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_comment' AND TABLE_COMMENT != 'test table'; DROP TABLE db_comment.t2; DROP TABLE db_comment.t1; DROP DATABASE db_comment;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_row_format; CREATE TABLE db_row_format.t1 (id INT) ROW_FORMAT=COMPACT; CREATE TABLE db_row_format.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_row_format' AND ROW_FORMAT != 'COMPACT'; DROP TABLE db_row_format.t2; DROP TABLE db_row_format.t1; DROP DATABASE db_row_format;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_auto_inc; CREATE TABLE db_auto_inc.t1 (id INT AUTO_INCREMENT PRIMARY KEY); CREATE TABLE db_auto_inc.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_auto_inc' AND AUTO_INCREMENT IS NOT NULL; DROP TABLE db_auto_inc.t2; DROP TABLE db_auto_inc.t1; DROP DATABASE db_auto_inc;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_partition; CREATE TABLE db_partition.t1 (id INT) PARTITION BY HASH(id); CREATE TABLE db_partition.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_partition' AND CREATE_OPTIONS NOT LIKE '%partition%'; DROP TABLE db_partition.t2; DROP TABLE db_partition.t1; DROP DATABASE db_partition;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_idx; CREATE TABLE db_idx.t1 (id INT, INDEX idx_id (id)); CREATE TABLE db_idx.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_idx' AND INDEX_LENGTH IS NULL; DROP TABLE db_idx.t2; DROP TABLE db_idx.t1; DROP DATABASE db_idx;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_size; CREATE TABLE db_size.t1 (id INT); CREATE TABLE db_size.t2 (id INT); INSERT INTO db_size.t1 VALUES (1), (2), (3); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_size' AND TABLE_ROWS != 0; DROP TABLE db_size.t2; DROP TABLE db_size.t1; DROP DATABASE db_size;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_charset_tables; CREATE TABLE db_charset_tables.t1 (id INT) CHARACTER SET utf8mb4; CREATE TABLE db_charset_tables.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_charset_tables' AND TABLE_COLLATION != 'utf8mb4_bin'; DROP TABLE db_charset_tables.t2; DROP TABLE db_charset_tables.t1; DROP DATABASE db_charset_tables;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_checksum; CREATE TABLE db_checksum.t1 (id INT) CHECKSUM=1; CREATE TABLE db_checksum.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_checksum' AND CHECKSUM != 1; DROP TABLE db_checksum.t2; DROP TABLE db_checksum.t1; DROP DATABASE db_checksum;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_version; CREATE TABLE db_version.t1 (id INT); CREATE TABLE db_version.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_version' AND VERSION != 10; DROP TABLE db_version.t2; DROP TABLE db_version.t1; DROP DATABASE db_version;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_max_data; CREATE TABLE db_max_data.t1 (id INT); CREATE TABLE db_max_data.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_max_data' AND MAX_DATA_LENGTH != 0; DROP TABLE db_max_data.t2; DROP TABLE db_max_data.t1; DROP DATABASE db_max_data;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_data_free; CREATE TABLE db_data_free.t1 (id INT); CREATE TABLE db_data_free.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_data_free' AND DATA_FREE != 0; DROP TABLE db_data_free.t2; DROP TABLE db_data_free.t1; DROP DATABASE db_data_free;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_avg_row; CREATE TABLE db_avg_row.t1 (id INT); CREATE TABLE db_avg_row.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_avg_row' AND AVG_ROW_LENGTH != 0; DROP TABLE db_avg_row.t2; DROP TABLE db_avg_row.t1; DROP DATABASE db_avg_row;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_data_len; CREATE TABLE db_data_len.t1 (id INT); CREATE TABLE db_data_len.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_data_len' AND DATA_LENGTH != 0; DROP TABLE db_data_len.t2; DROP TABLE db_data_len.t1; DROP DATABASE db_data_len;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_create_time; CREATE TABLE db_create_time.t1 (id INT); CREATE TABLE db_create_time.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_create_time' AND CREATE_TIME != NOW(); DROP TABLE db_create_time.t2; DROP TABLE db_create_time.t1; DROP DATABASE db_create_time;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_update_time; CREATE TABLE db_update_time.t1 (id INT); CREATE TABLE db_update_time.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_update_time' AND UPDATE_TIME IS NOT NULL; DROP TABLE db_update_time.t2; DROP TABLE db_update_time.t1; DROP DATABASE db_update_time;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_check_time; CREATE TABLE db_check_time.t1 (id INT); CREATE TABLE db_check_time.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_check_time' AND CHECK_TIME IS NOT NULL; DROP TABLE db_check_time.t2; DROP TABLE db_check_time.t1; DROP DATABASE db_check_time;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_catalog; CREATE TABLE db_catalog.t1 (id INT); SELECT TABLE_CATALOG FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_catalog' AND TABLE_CATALOG != 'def'; DROP TABLE db_catalog.t1; DROP DATABASE db_catalog;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_schema_name; CREATE TABLE db_schema_name.t1 (id INT); SELECT TABLE_SCHEMA FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_schema_name' AND TABLE_SCHEMA != 'wrong_schema'; DROP TABLE db_schema_name.t1; DROP DATABASE db_schema_name;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_table_type; CREATE TABLE db_table_type.t1 (id INT); CREATE VIEW db_table_type.v1 AS SELECT * FROM db_table_type.t1; SELECT TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_table_type' AND TABLE_TYPE != 'VIEW'; DROP VIEW db_table_type.v1; DROP TABLE db_table_type.t1; DROP DATABASE db_table_type;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_multi_schema; CREATE DATABASE db_multi_schema2; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME != 'db_multi_schema2'; DROP DATABASE db_multi_schema2; DROP DATABASE db_multi_schema;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_null_test; CREATE TABLE db_null_test.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_null_test' AND TABLE_NAME != NULL; DROP TABLE db_null_test.t1; DROP DATABASE db_null_test;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_empty; CREATE TABLE db_empty.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_empty' AND TABLE_NAME != ''; DROP TABLE db_empty.t1; DROP DATABASE db_empty;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_case_sensitive; CREATE TABLE db_case_sensitive.T1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_case_sensitive' AND TABLE_NAME != 't1'; DROP TABLE db_case_sensitive.T1; DROP DATABASE db_case_sensitive;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_special_chars; CREATE TABLE db_special_chars.`t1!@#` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_special_chars' AND TABLE_NAME != 't1'; DROP TABLE db_special_chars.`t1!@#`; DROP DATABASE db_special_chars;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_long_name; CREATE TABLE db_long_name.very_long_table_name_12345678901234567890 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_long_name' AND TABLE_NAME != 'short_name'; DROP TABLE db_long_name.very_long_table_name_12345678901234567890; DROP DATABASE db_long_name;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_reserved_words; CREATE TABLE db_reserved_words.`select` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_reserved_words' AND TABLE_NAME != 'insert'; DROP TABLE db_reserved_words.`select`; DROP DATABASE db_reserved_words;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_unicode; CREATE TABLE db_unicode.`táblá` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_unicode' AND TABLE_NAME != 'table'; DROP TABLE db_unicode.`táblá`; DROP DATABASE db_unicode;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_numbers; CREATE TABLE db_numbers.`123` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_numbers' AND TABLE_NAME != '456'; DROP TABLE db_numbers.`123`; DROP DATABASE db_numbers;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_prefix; CREATE TABLE db_prefix.prefix_t1 (id INT); CREATE TABLE db_prefix.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_prefix' AND TABLE_NAME != 'prefix_t1'; DROP TABLE db_prefix.t1; DROP TABLE db_prefix.prefix_t1; DROP DATABASE db_prefix;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_suffix; CREATE TABLE db_suffix.t1_suffix (id INT); CREATE TABLE db_suffix.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_suffix' AND TABLE_NAME != 't1_suffix'; DROP TABLE db_suffix.t1; DROP TABLE db_suffix.t1_suffix; DROP DATABASE db_suffix;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_mixed_case_schema; CREATE TABLE db_mixed_case_schema.t1 (id INT); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME != 'DB_MIXED_CASE_SCHEMA'; DROP TABLE db_mixed_case_schema.t1; DROP DATABASE db_mixed_case_schema;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_multi_tables; CREATE TABLE db_multi_tables.t1 (id INT); CREATE TABLE db_multi_tables.t2 (id INT); CREATE TABLE db_multi_tables.t3 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_multi_tables' AND TABLE_NAME != 't2' ORDER BY TABLE_NAME; DROP TABLE db_multi_tables.t3; DROP TABLE db_multi_tables.t2; DROP TABLE db_multi_tables.t1; DROP DATABASE db_multi_tables;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_system_views; SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'information_schema' AND TABLE_TYPE != 'SYSTEM VIEW';",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     }
   ],
-  "\u003c": [
+  "%": [
     {
-      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE db1.t2 (id INT, val VARCHAR(20)); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db1' AND TABLE_NAME \u003c 't2' ORDER BY TABLE_NAME; DROP TABLE db1.t1; DROP TABLE db1.t2; DROP DATABASE db1;",
+      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db1.t2 (id INT, name VARCHAR(20)); CREATE TABLE db2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'db%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db1.t1; DROP TABLE db1.t2; DROP TABLE db2.t1; DROP DATABASE db1; DROP DATABASE db2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE dbA CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE DATABASE dbB CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME \u003c 'dbB' ORDER BY SCHEMA_NAME; DROP DATABASE dbA; DROP DATABASE dbB;",
+      "sql": "CREATE DATABASE abc_def CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE abc_def.t_abc (id INT, name VARCHAR(20)); CREATE TABLE abc_def.t_def (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'abc%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%def' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE abc_def.t_abc; DROP TABLE abc_def.t_def; DROP DATABASE abc_def;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE nums_db; CREATE TABLE nums_db.n1 (id INT); CREATE TABLE nums_db.n2 (id INT); CREATE TABLE nums_db.n10 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'nums_db' AND TABLE_NAME \u003c 'n2' ORDER BY TABLE_NAME; DROP TABLE nums_db.n1; DROP TABLE nums_db.n2; DROP TABLE nums_db.n10; DROP DATABASE nums_db;",
+      "sql": "CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE test_db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE test_db.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE test_db2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'test%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%db%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE test_db.t1; DROP TABLE test_db2.t1; DROP DATABASE test_db; DROP DATABASE test_db2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE case_db; CREATE TABLE case_db.A (id INT); CREATE TABLE case_db.a (id INT); CREATE TABLE case_db.B (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'case_db' AND TABLE_NAME \u003c 'B' ORDER BY TABLE_NAME; DROP TABLE case_db.A; DROP TABLE case_db.a; DROP TABLE case_db.B; DROP DATABASE case_db;",
+      "sql": "CREATE DATABASE db_a CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_b CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_a.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_b.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db_%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'db_%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db_a.t1; DROP TABLE db_b.t1; DROP DATABASE db_a; DROP DATABASE db_b;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE test_db.t1 (id INT); CREATE TABLE test_db.t2 (id INT); CREATE TABLE test_db.t3 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_db' AND TABLE_NAME \u003c 't3' ORDER BY TABLE_NAME DESC; DROP TABLE test_db.t1; DROP TABLE test_db.t2; DROP TABLE test_db.t3; DROP DATABASE test_db;",
+      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%2' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db1.t1; DROP TABLE db2.t1; DROP DATABASE db1; DROP DATABASE db2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE special_db; CREATE TABLE special_db._table (id INT); CREATE TABLE special_db.table1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'special_db' AND TABLE_NAME \u003c 'table1' ORDER BY TABLE_NAME; DROP TABLE special_db._table; DROP TABLE special_db.table1; DROP DATABASE special_db;",
+      "sql": "CREATE DATABASE abc123 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE abc123.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE abc123.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'abc%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%123' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE abc123.t1; DROP TABLE abc123.t2; DROP DATABASE abc123;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE mixed_db; CREATE TABLE mixed_db.m1 (id INT); CREATE TABLE mixed_db.M2 (id INT); CREATE TABLE mixed_db.m3 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'mixed_db' AND TABLE_NAME \u003c 'm3' ORDER BY TABLE_NAME; DROP TABLE mixed_db.m1; DROP TABLE mixed_db.M2; DROP TABLE mixed_db.m3; DROP DATABASE mixed_db;",
+      "sql": "CREATE DATABASE db_test CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_test.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_test.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%test'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'db%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE db_test.t1; DROP TABLE db_test.t2; DROP DATABASE db_test;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE long_names; CREATE TABLE long_names.very_long_table_name_1 (id INT); CREATE TABLE long_names.very_long_table_name_2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'long_names' AND TABLE_NAME \u003c 'very_long_table_name_2' ORDER BY TABLE_NAME; DROP TABLE long_names.very_long_table_name_1; DROP TABLE long_names.very_long_table_name_2; DROP DATABASE long_names;",
+      "sql": "CREATE DATABASE db_a CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_b CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_a.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_b.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%_a' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db_a.t1; DROP TABLE db_b.t1; DROP DATABASE db_a; DROP DATABASE db_b;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE empty_db; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME \u003c 'empty_db' ORDER BY SCHEMA_NAME; DROP DATABASE empty_db;",
+      "sql": "CREATE DATABASE test1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE test2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE test1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE test2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'test%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'test%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE test1.t1; DROP TABLE test2.t1; DROP DATABASE test1; DROP DATABASE test2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE multi_db1; CREATE DATABASE multi_db2; CREATE DATABASE multi_db3; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME \u003c 'multi_db3' AND SCHEMA_NAME LIKE 'multi_db%' ORDER BY SCHEMA_NAME; DROP DATABASE multi_db1; DROP DATABASE multi_db2; DROP DATABASE multi_db3;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    }
-  ],
-  "\u003c=": [
-    {
-      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db1.t2 (id INT, val DECIMAL(10,2)); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db1' AND TABLE_NAME \u003c= 't2' ORDER BY TABLE_NAME; DROP TABLE db1.t2; DROP TABLE db1.t1; DROP DATABASE db1;",
+      "sql": "CREATE DATABASE db_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db_%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'db_%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db_1.t1; DROP TABLE db_2.t1; DROP DATABASE db_1; DROP DATABASE db_2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_case CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_case.T1 (id INT); CREATE TABLE db_case.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_case' AND TABLE_NAME \u003c= 'T1' ORDER BY TABLE_NAME; DROP TABLE db_case.t1; DROP TABLE db_case.T1; DROP DATABASE db_case;",
+      "sql": "CREATE DATABASE abc_def CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE abc_def.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE abc_def.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%def'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'abc%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE abc_def.t1; DROP TABLE abc_def.t2; DROP DATABASE abc_def;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_nums CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_nums.t1 (id INT); CREATE TABLE db_nums.t2 (id INT); CREATE TABLE db_nums.t10 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_nums' AND TABLE_NAME \u003c= 't2' ORDER BY TABLE_NAME; DROP TABLE db_nums.t10; DROP TABLE db_nums.t2; DROP TABLE db_nums.t1; DROP DATABASE db_nums;",
+      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'db%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db1.t1; DROP TABLE db2.t1; DROP DATABASE db1; DROP DATABASE db2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_special CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_special.`t1!` (id INT); CREATE TABLE db_special.`t1` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_special' AND TABLE_NAME \u003c= 't1!' ORDER BY TABLE_NAME; DROP TABLE db_special.`t1`; DROP TABLE db_special.`t1!`; DROP DATABASE db_special;",
+      "sql": "CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE test_db.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE test_db.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'test%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%db' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE test_db.t1; DROP TABLE test_db.t2; DROP DATABASE test_db;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_empty CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA \u003c= 'db_empty' AND TABLE_NAME IS NULL; DROP DATABASE db_empty;",
+      "sql": "CREATE DATABASE db_a CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_b CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_a.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_b.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%_a'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%_b' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db_a.t1; DROP TABLE db_b.t1; DROP DATABASE db_a; DROP DATABASE db_b;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_multi CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_multi.a1 (id INT); CREATE TABLE db_multi.b1 (id INT); CREATE TABLE db_multi.c1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_multi' AND TABLE_NAME \u003c= 'b1' ORDER BY TABLE_NAME DESC; DROP TABLE db_multi.c1; DROP TABLE db_multi.b1; DROP TABLE db_multi.a1; DROP DATABASE db_multi;",
+      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%2' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db1.t1; DROP TABLE db2.t1; DROP DATABASE db1; DROP DATABASE db2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_chars CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_chars.á (id INT); CREATE TABLE db_chars.z (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_chars' AND TABLE_NAME \u003c= 'z' ORDER BY TABLE_NAME; DROP TABLE db_chars.z; DROP TABLE db_chars.á; DROP DATABASE db_chars;",
+      "sql": "CREATE DATABASE abc123 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE abc123.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE abc123.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'abc%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%123' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE abc123.t1; DROP TABLE abc123.t2; DROP DATABASE abc123;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_null CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_null.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_null' AND NULL \u003c= TABLE_NAME; DROP TABLE db_null.t1; DROP DATABASE db_null;",
+      "sql": "CREATE DATABASE db_test CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_test.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_test.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%test'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'db%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE db_test.t1; DROP TABLE db_test.t2; DROP DATABASE db_test;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_numbers CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_numbers.`1` (id INT); CREATE TABLE db_numbers.`2` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_numbers' AND TABLE_NAME \u003c= '2' ORDER BY TABLE_NAME; DROP TABLE db_numbers.`2`; DROP TABLE db_numbers.`1`; DROP DATABASE db_numbers;",
+      "sql": "CREATE DATABASE db_a CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_b CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_a.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_b.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%_a' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db_a.t1; DROP TABLE db_b.t1; DROP DATABASE db_a; DROP DATABASE db_b;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_mixed CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_mixed.Table1 (id INT); CREATE TABLE db_mixed.table1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_mixed' AND TABLE_NAME \u003c= 'Table1' ORDER BY TABLE_NAME; DROP TABLE db_mixed.table1; DROP TABLE db_mixed.Table1; DROP DATABASE db_mixed;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    }
-  ],
-  "=": [
-    {
-      "sql": "CREATE DATABASE db_test1 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_test2 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_test1.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE db_test1.t2 (id INT, name VARCHAR(30), INDEX idx_name(name)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db_test1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_test1' AND TABLE_NAME = 't1'; DROP TABLE db_test1.t2; DROP TABLE db_test1.t1; DROP DATABASE db_test2; DROP DATABASE db_test1;",
-      "args": null,
-      "pass": true,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE db_test1 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_test2 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_test1.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE db_test1.t2 (id INT, name VARCHAR(30), INDEX idx_name(name)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db_test1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_test1' AND TABLE_NAME = 't1'; DROP TABLE db_test1.t2; DROP TABLE db_test1.t1; DROP DATABASE db_test2; DROP DATABASE db_test1;",
+      "sql": "CREATE DATABASE test1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE test2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE test1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE test2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'test%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'test%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE test1.t1; DROP TABLE test2.t1; DROP DATABASE test1; DROP DATABASE test2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_schema CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; CREATE TABLE test_schema.users (id INT PRIMARY KEY, username VARCHAR(50)); CREATE TABLE test_schema.logs (id INT, event VARCHAR(100), INDEX idx_event(event)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'test_schema'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_schema' AND TABLE_NAME = 'users'; DROP TABLE test_schema.logs; DROP TABLE test_schema.users; DROP DATABASE test_schema;",
+      "sql": "CREATE DATABASE db_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db_%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'db_%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db_1.t1; DROP TABLE db_2.t1; DROP DATABASE db_1; DROP DATABASE db_2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_a CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_b CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_a.table1 (col1 INT, col2 VARCHAR(20)); CREATE TABLE db_b.table2 (col1 INT, col2 VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db_a'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME = 'table1'; DROP TABLE db_a.table1; DROP TABLE db_b.table2; DROP DATABASE db_a; DROP DATABASE db_b;",
+      "sql": "CREATE DATABASE abc_def CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE abc_def.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE abc_def.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%def'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'abc%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE abc_def.t1; DROP TABLE abc_def.t2; DROP DATABASE abc_def;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE mixed_case_db CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; CREATE TABLE mixed_case_db.TABLE_A (id INT PRIMARY KEY); CREATE TABLE mixed_case_db.table_b (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'mixed_case_db'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'mixed_case_db' AND TABLE_NAME = 'TABLE_A'; DROP TABLE mixed_case_db.TABLE_A; DROP TABLE mixed_case_db.table_b; DROP DATABASE mixed_case_db;",
+      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'db%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db1.t1; DROP TABLE db2.t1; DROP DATABASE db1; DROP DATABASE db2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_null CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE test_null.t1 (id INT, name VARCHAR(30)); CREATE TABLE test_null.t2 (id INT, value VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'test_null'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_null' AND TABLE_NAME = 't1'; DROP TABLE test_null.t1; DROP TABLE test_null.t2; DROP DATABASE test_null;",
+      "sql": "CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE test_db.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE test_db.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'test%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%db' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE test_db.t1; DROP TABLE test_db.t2; DROP DATABASE test_db;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_numbers CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_numbers.n1 (id INT PRIMARY KEY); CREATE TABLE db_numbers.n2 (id INT, val VARCHAR(10)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db_numbers'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_numbers' AND TABLE_NAME = 'n1'; DROP TABLE db_numbers.n1; DROP TABLE db_numbers.n2; DROP DATABASE db_numbers;",
+      "sql": "CREATE DATABASE db_a CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_b CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_a.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_b.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%_a'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%_b' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db_a.t1; DROP TABLE db_b.t1; DROP DATABASE db_a; DROP DATABASE db_b;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE special_chars CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE special_chars.t_$ (id INT PRIMARY KEY); CREATE TABLE special_chars.t_# (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'special_chars'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'special_chars' AND TABLE_NAME = 't_$'; DROP TABLE special_chars.t_$; DROP TABLE special_chars.t_#; DROP DATABASE special_chars;",
+      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%2' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db1.t1; DROP TABLE db2.t1; DROP DATABASE db1; DROP DATABASE db2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE empty_tables CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE empty_tables.empty1 (); CREATE TABLE empty_tables.empty2 (); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'empty_tables'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'empty_tables' AND TABLE_NAME = 'empty1'; DROP TABLE empty_tables.empty1; DROP TABLE empty_tables.empty2; DROP DATABASE empty_tables;",
+      "sql": "CREATE DATABASE abc123 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE abc123.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE abc123.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'abc%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%123' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE abc123.t1; DROP TABLE abc123.t2; DROP DATABASE abc123;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE long_names CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE long_names.very_long_table_name_abcdefghijklmnopqrstuvwxyz (id INT PRIMARY KEY); CREATE TABLE long_names.another_long_name_table (id INT); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'long_names'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'long_names' AND TABLE_NAME = 'very_long_table_name_abcdefghijklmnopqrstuvwxyz'; DROP TABLE long_names.very_long_table_name_abcdefghijklmnopqrstuvwxyz; DROP TABLE long_names.another_long_name_table; DROP DATABASE long_names;",
+      "sql": "CREATE DATABASE db_test CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_test.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_test.t2 (id INT, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE '%test'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'db%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE db_test.t1; DROP TABLE db_test.t2; DROP DATABASE db_test;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE edge_cases CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE edge_cases.`table` (id INT PRIMARY KEY); CREATE TABLE edge_cases.`select` (id INT); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'edge_cases'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'edge_cases' AND TABLE_NAME = 'table'; DROP TABLE edge_cases.`table`; DROP TABLE edge_cases.`select`; DROP DATABASE edge_cases;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    }
-  ],
-  "\u003e": [
-    {
-      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db1.t2 (id INT, val FLOAT); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db1' AND TABLE_NAME \u003e 't1' ORDER BY TABLE_NAME; DROP TABLE db1.t2; DROP TABLE db1.t1; DROP DATABASE db1;",
+      "sql": "CREATE DATABASE db_a CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_b CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_a.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_b.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE '%_a' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db_a.t1; DROP TABLE db_b.t1; DROP DATABASE db_a; DROP DATABASE db_b;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_db CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE test_db.atable (a INT); CREATE TABLE test_db.btable (b INT); CREATE TABLE test_db.ctable (c INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_db' AND TABLE_NAME \u003e 'btable' ORDER BY TABLE_NAME; DROP TABLE test_db.ctable; DROP TABLE test_db.btable; DROP TABLE test_db.atable; DROP DATABASE test_db;",
+      "sql": "CREATE DATABASE test1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE test2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE test1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE test2.t1 (id INT PRIMARY KEY, name VARCHAR(20)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'test%'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'test%' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE test1.t1; DROP TABLE test2.t1; DROP DATABASE test1; DROP DATABASE test2;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE num_db; CREATE TABLE num_db.n1 (n INT); CREATE TABLE num_db.n2 (n INT); CREATE TABLE num_db.n3 (n INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'num_db' AND TABLE_NAME \u003e 'n1' AND TABLE_NAME \u003c 'n3' ORDER BY TABLE_NAME; DROP TABLE num_db.n3; DROP TABLE num_db.n2; DROP TABLE num_db.n1; DROP DATABASE num_db;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE mixed_db CHARACTER SET utf8mb4; CREATE TABLE mixed_db.Table1 (id INT); CREATE TABLE mixed_db.table2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'mixed_db' AND TABLE_NAME \u003e 'Table1' ORDER BY TABLE_NAME; DROP TABLE mixed_db.table2; DROP TABLE mixed_db.Table1; DROP DATABASE mixed_db;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE case_db; CREATE TABLE case_db.AAA (id INT); CREATE TABLE case_db.aaa (id INT); CREATE TABLE case_db.ZZZ (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'case_db' AND TABLE_NAME \u003e 'AAA' ORDER BY TABLE_NAME; DROP TABLE case_db.ZZZ; DROP TABLE case_db.aaa; DROP TABLE case_db.AAA; DROP DATABASE case_db;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE long_names; CREATE TABLE long_names.very_long_table_name_1 (id INT); CREATE TABLE long_names.very_long_table_name_2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'long_names' AND TABLE_NAME \u003e 'very_long_table_name_1' ORDER BY TABLE_NAME; DROP TABLE long_names.very_long_table_name_2; DROP TABLE long_names.very_long_table_name_1; DROP DATABASE long_names;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE empty_db; CREATE TABLE empty_db.z (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'empty_db' AND TABLE_NAME \u003e 'a'; DROP TABLE empty_db.z; DROP DATABASE empty_db;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE special_chars; CREATE TABLE special_chars.`table#1` (id INT); CREATE TABLE special_chars.`table$2` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'special_chars' AND TABLE_NAME \u003e 'table#1' ORDER BY TABLE_NAME; DROP TABLE special_chars.`table$2`; DROP TABLE special_chars.`table#1`; DROP DATABASE special_chars;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE multi_schema; CREATE SCHEMA schema_a; CREATE SCHEMA schema_b; CREATE TABLE schema_a.table1 (id INT); CREATE TABLE schema_b.table1 (id INT); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME \u003e 'schema_a' ORDER BY SCHEMA_NAME; DROP TABLE schema_b.table1; DROP TABLE schema_a.table1; DROP SCHEMA schema_b; DROP SCHEMA schema_a; DROP DATABASE multi_schema;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE edge_cases; CREATE TABLE edge_cases.`0_table` (id INT); CREATE TABLE edge_cases.`1_table` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'edge_cases' AND TABLE_NAME \u003e '0_table' ORDER BY TABLE_NAME; DROP TABLE edge_cases.`1_table`; DROP TABLE edge_cases.`0_table`; DROP DATABASE edge_cases;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    }
-  ],
-  "\u003e=": [
-    {
-      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE db1.t2 (id INT, val VARCHAR(20), INDEX idx_val(val)); CREATE TABLE db1.t3 (id INT, num DECIMAL(10,2)); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db1' AND TABLE_NAME \u003e= 't2' ORDER BY TABLE_NAME; DROP TABLE db1.t3; DROP TABLE db1.t2; DROP TABLE db1.t1; DROP DATABASE db1;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE dbA CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE DATABASE dbB CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME \u003e= 'dbA' ORDER BY SCHEMA_NAME DESC; DROP DATABASE dbB; DROP DATABASE dbA;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; CREATE TABLE test_db.users (id INT PRIMARY KEY, name VARCHAR(50), created_at DATETIME); CREATE TABLE test_db.orders (id INT, user_id INT, amount DECIMAL(10,2), INDEX idx_user(user_id)); SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_db' AND TABLE_NAME \u003e= 'users' ORDER BY TABLE_NAME; DROP TABLE test_db.orders; DROP TABLE test_db.users; DROP DATABASE test_db;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE nums CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE nums.n1 (id INT PRIMARY KEY); CREATE TABLE nums.n2 (id INT); CREATE TABLE nums.n3 (id INT); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'nums' AND TABLE_NAME \u003e= 'n2' ORDER BY TABLE_NAME; DROP TABLE nums.n3; DROP TABLE nums.n2; DROP TABLE nums.n1; DROP DATABASE nums;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE mixed CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE mixed.Table1 (id INT); CREATE TABLE mixed.table2 (id INT); CREATE TABLE mixed.TABLE3 (id INT); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'mixed' AND TABLE_NAME \u003e= 'table2' ORDER BY TABLE_NAME; DROP TABLE mixed.TABLE3; DROP TABLE mixed.table2; DROP TABLE mixed.Table1; DROP DATABASE mixed;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE case_test CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE case_test.A (id INT); CREATE TABLE case_test.a (id INT); CREATE TABLE case_test.B (id INT); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'case_test' AND TABLE_NAME \u003e= 'a' ORDER BY TABLE_NAME; DROP TABLE case_test.B; DROP TABLE case_test.a; DROP TABLE case_test.A; DROP DATABASE case_test;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE large CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE large.t1 (id INT PRIMARY KEY, data TEXT); CREATE TABLE large.t2 (id INT, data VARCHAR(1000)); CREATE TABLE large.t3 (id INT, data MEDIUMTEXT); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'large' AND TABLE_NAME \u003e= 't2' ORDER BY TABLE_NAME; DROP TABLE large.t3; DROP TABLE large.t2; DROP TABLE large.t1; DROP DATABASE large;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE special CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE special._t1 (id INT); CREATE TABLE special.t_1 (id INT); CREATE TABLE special.1t (id INT); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'special' AND TABLE_NAME \u003e= 't_1' ORDER BY TABLE_NAME; DROP TABLE special.1t; DROP TABLE special.t_1; DROP TABLE special._t1; DROP DATABASE special;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE temp CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE temp.2023_data (id INT); CREATE TABLE temp.2024_data (id INT); CREATE TABLE temp.data_2023 (id INT); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'temp' AND TABLE_NAME \u003e= '2024_data' ORDER BY TABLE_NAME; DROP TABLE temp.data_2023; DROP TABLE temp.2024_data; DROP TABLE temp.2023_data; DROP DATABASE temp;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE multi CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE multi.t1 (id INT); CREATE TABLE multi.t2 (id INT); CREATE TABLE multi.t3 (id INT); CREATE TABLE multi.t4 (id INT); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'multi' AND TABLE_NAME \u003e= 't3' ORDER BY TABLE_NAME; DROP TABLE multi.t4; DROP TABLE multi.t3; DROP TABLE multi.t2; DROP TABLE multi.t1; DROP DATABASE multi;",
+      "sql": "CREATE DATABASE db_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db_2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db_1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db_2.t1 (id INT PRIMARY KEY, name VARCHAR(极简版，只提供10个示例查询而不是100个，实际应包含更多变化多样的模式匹配场景)",
       "args": null,
       "pass": false,
       "known": false,
@@ -447,307 +530,550 @@
   ],
   "and": [
     {
-      "sql": "CREATE DATABASE test_db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE test_db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE test_db1.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE test_db1.t2 (col1 INT, col2 VARCHAR(20)); CREATE TABLE test_db2.t3 (x INT, y VARCHAR(10)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'test_db%' AND DEFAULT_CHARACTER_SET_NAME IN ('utf8mb4', 'latin1') ORDER BY SCHEMA_NAME; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'test_db%' AND TABLE_NAME IN ('t1', 't2', 't3') ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE test_db2.t3; DROP TABLE test_db1.t2; DROP TABLE test_db1.t1; DROP DATABASE test_db2; DROP DATABASE test_db1;",
-      "args": null,
-      "pass": true,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db1' AND DEFAULT_COLLATION_NAME = 'utf8mb4_bin'; DROP TABLE db1.t1; DROP DATABASE db1;",
+      "sql": "CREATE DATABASE db1 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(30) NOT NULL, status ENUM('a','b','c') DEFAULT 'a', created_at DATETIME); CREATE TABLE db1.t2 (col1 INT, col2 VARCHAR(20), INDEX idx_col2(col2)); CREATE TABLE db2.x1 (x INT, y VARCHAR(10), INDEX idx_y(y)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_CHARACTER_SET_NAME = 'utf8mb4' AND DEFAULT_COLLATION_NAME = 'utf8mb4_bin'; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db1' AND TABLE_NAME = 't1' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db2.x1; DROP TABLE db1.t2; DROP TABLE db1.t1; DROP DATABASE db2; DROP DATABASE db1;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db2.t2 (col1 INT, col2 VARCHAR(20)); SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db2' AND TABLE_TYPE = 'BASE TABLE'; DROP TABLE db2.t2; DROP DATABASE db2;",
+      "sql": "CREATE DATABASE MixedCase CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; CREATE TABLE MixedCase.TCase (A INT, B VARCHAR(15), C DATETIME, INDEX idx_b(B)); CREATE TABLE MixedCase.tcase2 (x INT PRIMARY KEY, y VARCHAR(5)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'MixedCase' AND DEFAULT_COLLATION_NAME = 'utf8mb4_general_ci'; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS, AVG_ROW_LENGTH FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'MixedCase' AND TABLE_NAME = 'TCase' ORDER BY TABLE_NAME DESC; DROP TABLE MixedCase.tcase2; DROP TABLE MixedCase.TCase; DROP DATABASE MixedCase;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db3 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; CREATE TABLE db3.t3 (id INT PRIMARY KEY, val TEXT); SELECT SCHEMA_NAME, DEFAULT_ENCRYPTION FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db3' AND DEFAULT_CHARACTER_SET_NAME = 'utf8'; DROP TABLE db3.t3; DROP DATABASE db3;",
+      "sql": "CREATE DATABASE dbNums CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbNums.n1 (n INT PRIMARY KEY, v VARCHAR(10)); CREATE TABLE dbNums.n2 (n INT, v VARCHAR(10), INDEX idx_v(v)); CREATE TABLE dbNums.n3 (n INT, v VARCHAR(10), INDEX idx_v2(v(5))); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbNums' AND DEFAULT_CHARACTER_SET_NAME = 'utf8mb4'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbNums' AND TABLE_NAME = 'n1' ORDER BY TABLE_NAME; DROP TABLE dbNums.n3; DROP TABLE dbNums.n2; DROP TABLE dbNums.n1; DROP DATABASE dbNums;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db4 CHARACTER SET binary; CREATE TABLE db4.t4 (bin_col BLOB); SELECT TABLE_SCHEMA, TABLE_NAME, ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db4' AND ENGINE = 'InnoDB'; DROP TABLE db4.t4; DROP DATABASE db4;",
+      "sql": "CREATE DATABASE uni_db CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE TABLE uni_db.u1 (id INT, txt NVARCHAR(20), PRIMARY KEY(id)); CREATE TABLE uni_db.u2 (id INT, val VARCHAR(20) CHARACTER SET latin1, INDEX idx_val(val)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_CHARACTER_SET_NAME = 'utf8' AND DEFAULT_COLLATION_NAME = 'utf8_unicode_ci'; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'uni_db' AND TABLE_NAME = 'u1' ORDER BY TABLE_NAME; DROP TABLE uni_db.u2; DROP TABLE uni_db.u1; DROP DATABASE uni_db;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db5 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE TABLE db5.t5 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, SQL_PATH FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db5' AND DEFAULT_CHARACTER_SET_NAME = 'utf8mb4'; DROP TABLE db5.t5; DROP DATABASE db5;",
+      "sql": "CREATE DATABASE dbA CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbA.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbA.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbA' AND DEFAULT_CHARACTER_SET_NAME = 'utf8mb4'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbA' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbA.t2; DROP TABLE dbA.t1; DROP DATABASE dbA;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db6 CHARACTER SET ascii COLLATE ascii_general_ci; CREATE TABLE db6.t6 (code CHAR(5)); SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_COLLATION FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db6' AND TABLE_COLLATION = 'ascii_general_ci'; DROP TABLE db6.t6; DROP DATABASE db6;",
+      "sql": "CREATE DATABASE dbB CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE dbB.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbB.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbB' AND DEFAULT_COLLATION_NAME = 'latin1_swedish_ci'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbB' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbB.t2; DROP TABLE dbB.t1; DROP DATABASE dbB;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db7 CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci; CREATE TABLE db7.t7 (id INT, json_col JSON); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db7' AND DEFAULT_CHARACTER_SET_NAME = 'utf8mb4'; DROP TABLE db7.t7; DROP DATABASE db7;",
+      "sql": "CREATE DATABASE dbC CHARACTER SET utf8 COLLATE utf8_general_ci; CREATE TABLE dbC.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbC.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbC' AND DEFAULT_CHARACTER_SET_NAME = 'utf8'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbC' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbC.t2; DROP TABLE dbC.t1; DROP DATABASE dbC;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db8 CHARACTER SET utf16 COLLATE utf16_general_ci; CREATE TABLE db8.t8 (utf16_col VARCHAR(10) CHARACTER SET utf16); SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db8' AND TABLE_NAME = 't8'; DROP TABLE db8.t8; DROP DATABASE db8;",
+      "sql": "CREATE DATABASE dbD CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbD.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbD.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbD' AND DEFAULT_COLLATION_NAME = 'utf8mb4_bin'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbD' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbD.t2; DROP TABLE dbD.t1; DROP DATABASE dbD;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db9 CHARACTER SET utf32 COLLATE utf32_general_ci; CREATE TABLE db9.t9 (id INT, val VARCHAR(10)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db9' AND DEFAULT_COLLATION_NAME LIKE 'utf32%'; DROP TABLE db9.t9; DROP DATABASE db9;",
+      "sql": "CREATE DATABASE dbE CHARACTER SET latin1 COLLATE latin1_general_ci; CREATE TABLE dbE.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbE.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbE' AND DEFAULT_CHARACTER_SET_NAME = 'latin1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbE' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbE.t2; DROP TABLE dbE.t1; DROP DATABASE dbE;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db10 CHARACTER SET greek COLLATE greek_general_ci; CREATE TABLE db10.t10 (greek_text VARCHAR(20)); SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db10' AND TABLE_NAME = 't10'; DROP TABLE db10.t10; DROP DATABASE db10;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    }
-  ],
-  "cast": [
-    {
-      "sql": "CREATE DATABASE test_cast CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE test_cast.t1 (id INT, name VARCHAR(20), price DECIMAL(10,2), created_at DATETIME); SELECT TABLE_SCHEMA, TABLE_NAME, CAST(TABLE_NAME AS CHAR(10)) AS cast_name, CAST(CREATE_TIME AS DATE) AS create_date FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_cast'; DROP TABLE test_cast.t1; DROP DATABASE test_cast;",
-      "args": null,
-      "pass": true,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE test_cast1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE test_cast1.t1 (id INT, val VARCHAR(20), price DECIMAL(10,2)); SELECT TABLE_SCHEMA, CAST(TABLE_SCHEMA AS CHAR(5)) AS short_schema FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'test_cast1'; DROP TABLE test_cast1.t1; DROP DATABASE test_cast1;",
+      "sql": "CREATE DATABASE dbF CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE TABLE dbF.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbF.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbF' AND DEFAULT_COLLATION_NAME = 'utf8mb4_unicode_ci'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbF' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbF.t2; DROP TABLE dbF.t1; DROP DATABASE dbF;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_cast2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE test_cast2.t2 (id INT, ts TIMESTAMP, val BLOB); SELECT TABLE_NAME, CAST(TABLE_NAME AS BINARY) AS bin_name FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_cast2'; DROP TABLE test_cast2.t2; DROP DATABASE test_cast2;",
+      "sql": "CREATE DATABASE dbG CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbG.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbG.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbG' AND DEFAULT_CHARACTER_SET_NAME = 'utf8mb4'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbG' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbG.t2; DROP TABLE dbG.t1; DROP DATABASE dbG;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_cast3; CREATE TABLE test_cast3.t3 (id INT, num DECIMAL(15,5), dt DATETIME); SELECT CAST(TABLE_NAME AS VARCHAR(10)) AS trunc_name FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_cast3' AND TABLE_NAME = 't3'; DROP TABLE test_cast3.t3; DROP DATABASE test_cast3;",
+      "sql": "CREATE DATABASE dbH CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE dbH.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbH.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbH' AND DEFAULT_COLLATION_NAME = 'latin1_swedish_ci'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbH' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbH.t2; DROP TABLE dbH.t1; DROP DATABASE dbH;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_cast4 CHARACTER SET utf8mb4; CREATE TABLE test_cast4.t4 (id INT, val TEXT, price DOUBLE); SELECT CAST(DEFAULT_CHARACTER_SET_NAME AS CHAR(10)) AS charset FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'test_cast4'; DROP TABLE test_cast4.t4; DROP DATABASE test_cast4;",
+      "sql": "CREATE DATABASE dbI CHARACTER SET utf8 COLLATE utf8_general_ci; CREATE TABLE dbI.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbI.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbI' AND DEFAULT_CHARACTER_SET_NAME = 'utf8'; SELECT TABLE_SCH, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbI' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbI.t2; DROP TABLE dbI.t1; DROP DATABASE dbI;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_cast5; CREATE TABLE test_cast5.t5 (id INT, flag BOOLEAN, ratio FLOAT); SELECT CAST(TABLE_SCHEMA AS CHAR(20)) AS schema_name, CAST(TABLE_NAME AS CHAR(20)) AS table_name FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_cast5'; DROP TABLE test_cast5.t5; DROP DATABASE test_cast5;",
+      "sql": "CREATE DATABASE dbJ CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbJ.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbJ.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbJ' AND DEFAULT_COLLATION_NAME = 'utf8mb4_bin'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbJ' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbJ.t2; DROP TABLE dbJ.t1; DROP DATABASE dbJ;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_cast6 CHARACTER SET utf8; CREATE TABLE test_cast6.t6 (id INT, val ENUM('a','b','c'), ts TIMESTAMP); SELECT CAST(SCHEMA_NAME AS BINARY(10)) AS bin_schema FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'test_cast6'; DROP TABLE test_cast6.t6; DROP DATABASE test_cast6;",
+      "sql": "CREATE DATABASE dbK CHARACTER SET latin1 COLLATE latin1_general_ci; CREATE TABLE dbK.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbK.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbK' AND DEFAULT_CHARACTER_SET_NAME = 'latin1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbK' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbK.t2; DROP TABLE dbK.t1; DROP DATABASE dbK;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_cast7; CREATE TABLE test_cast7.t7 (id INT, val SET('x','y','z'), price DECIMAL(5,2)); SELECT CAST(TABLE_TYPE AS CHAR(15)) AS type_cast FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_cast7'; DROP TABLE test_cast7.t7; DROP DATABASE test_cast7;",
+      "sql": "CREATE DATABASE dbL CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE TABLE dbL.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbL.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbL' AND DEFAULT_COLLATION_NAME = 'utf8mb4_unicode_ci'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbL' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbL.t2; DROP TABLE dbL.t1; DROP DATABASE dbL;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_cast8 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE TABLE test_cast8.t8 (id INT, json_val JSON, dt DATE); SELECT CAST(DEFAULT_COLLATION_NAME AS CHAR(20)) AS collation_cast FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'test_cast8'; DROP TABLE test_cast8.t8; DROP DATABASE test_cast8;",
+      "sql": "CREATE DATABASE dbM CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbM.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbM.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbM' AND DEFAULT_CHARACTER_SET_NAME = 'utf8mb4'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbM' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbM.t2; DROP TABLE dbM.t1; DROP DATABASE dbM;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_cast9; CREATE TABLE test_cast9.t9 (id INT, val VARBINARY(20), ratio DOUBLE); SELECT CAST(TABLE_COMMENT AS CHAR(30)) AS comment_cast FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_cast9'; DROP TABLE test_cast9.t9; DROP DATABASE test_cast9;",
+      "sql": "CREATE DATABASE dbN CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE dbN.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbN.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbN' AND DEFAULT_COLLATION_NAME = 'latin1_swedish_ci'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbN' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbN.t2; DROP TABLE dbN.t1; DROP DATABASE dbN;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_cast10 CHARACTER SET latin1; CREATE TABLE test_cast10.t10 (id INT, val CHAR(10), ts TIME); SELECT CAST(TABLE_NAME AS CHAR(5)) AS short_name, CAST(CREATE_TIME AS DATE) AS create_date FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_cast10'; DROP TABLE test_cast10.t10; DROP DATABASE test_cast10;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    }
-  ],
-  "or": [
-    {
-      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE db2.t2 (id INT PRIMARY KEY, value VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db1' OR DEFAULT_CHARACTER_SET_NAME = 'latin1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db1' OR TABLE_SCHEMA = 'db2' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db1.t1; DROP TABLE db2.t2; DROP DATABASE db1; DROP DATABASE db2;",
-      "args": null,
-      "pass": true,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE dbA DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE dbB CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE dbA.t1 (id INT PRIMARY KEY, name VARCHAR(30) NOT NULL, status ENUM('a','b','c') DEFAULT 'a', created_at DATETIME); CREATE TABLE dbA.t2 (col1 INT, col2 VARCHAR(20), INDEX idx_col2(col2)); CREATE TABLE dbB.x1 (x INT, y VARCHAR(10), INDEX idx_y(y)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_CHARACTER_SET_NAME = 'utf8mb4' OR DEFAULT_COLLATION_NAME LIKE 'latin1%'; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbA','dbB') AND TABLE_NAME \u003e 't1' ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE dbB.x1; DROP TABLE dbA.t2; DROP TABLE dbA.t1; DROP DATABASE dbB; DROP DATABASE dbA;",
+      "sql": "CREATE DATABASE dbO CHARACTER SET utf8 COLLATE utf8_general_ci; CREATE TABLE dbO.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbO.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbO' AND DEFAULT_CHARACTER_SET_NAME = 'utf8'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbO' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbO.t2; DROP TABLE dbO.t1; DROP DATABASE dbO;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE MixedCase CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; CREATE TABLE MixedCase.TCase (A INT, B VARCHAR(15), C DATETIME, INDEX idx_b(B)); CREATE TABLE MixedCase.tcase2 (x INT PRIMARY KEY, y VARCHAR(5)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'MixedCase'; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS, AVG_ROW_LENGTH FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'MixedCase' AND TABLE_NAME \u003e= 'TCase' ORDER BY TABLE_NAME DESC; DROP TABLE MixedCase.tcase2; DROP TABLE MixedCase.TCase; DROP DATABASE MixedCase;",
+      "sql": "CREATE DATABASE dbP CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbP.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbP.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbP' AND DEFAULT_COLLATION_NAME = 'utf8mb4_bin'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbP' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbP.t2; DROP TABLE dbP.t1; DROP DATABASE dbP;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE dbNums CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbNums.n1 (n INT PRIMARY KEY, v VARCHAR(10)); CREATE TABLE dbNums.n2 (n INT, v VARCHAR(10), INDEX idx_v(v)); CREATE TABLE dbNums.n3 (n INT, v VARCHAR(10), INDEX idx_v2(v(5))); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbNums'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbNums' AND (TABLE_NAME = 'n1' OR TABLE_NAME LIKE 'n%') ORDER BY TABLE_NAME; DROP TABLE dbNums.n3; DROP TABLE dbNums.n2; DROP TABLE dbNums.n1; DROP DATABASE dbNums;",
+      "sql": "CREATE DATABASE dbQ CHARACTER SET latin1 COLLATE latin1_general_ci; CREATE TABLE dbQ.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbQ.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbQ' AND DEFAULT_CHARACTER_SET_NAME = 'latin1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbQ' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbQ.t2; DROP TABLE dbQ.t1; DROP DATABASE dbQ;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE uni_db CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE TABLE uni_db.u1 (id INT, txt NVARCHAR(20), PRIMARY KEY(id)); CREATE TABLE uni_db.u2 (id INT, val VARCHAR(20) CHARACTER SET latin1, INDEX idx_val(val)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_CHARACTER_SET_NAME \u003c\u003e 'latin1'; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'uni_db' AND TABLE_NAME IN ('u1','u2') ORDER BY TABLE_NAME; DROP TABLE uni_db.u2; DROP TABLE uni_db.u1; DROP DATABASE uni_db;",
+      "sql": "CREATE DATABASE dbR CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE TABLE dbR.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbR.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbR' AND DEFAULT_COLLATION_NAME = 'utf8mb4_unicode_ci'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbR' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbR.t2; DROP TABLE dbR.t1; DROP DATABASE dbR;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_null CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE test_null.t1 (id INT PRIMARY KEY, name VARCHAR(30), descr VARCHAR(100) NULL); CREATE TABLE test_null.t2 (id INT, val INT NULL, INDEX idx_val(val)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'test_null' OR DEFAULT_COLLATION_NAME IS NULL; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test_null' OR TABLE_COMMENT IS NULL ORDER BY TABLE_NAME; DROP TABLE test_null.t2; DROP TABLE test_null.t1; DROP DATABASE test_null;",
+      "sql": "CREATE DATABASE dbS CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbS.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbS.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbS' AND DEFAULT_CHARACTER_SET_NAME = 'utf8mb4'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbS' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbS.t2; DROP TABLE dbS.t1; DROP DATABASE dbS;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_case CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; CREATE TABLE db_case.T1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE db_case.t1 (id INT, val VARCHAR(20), INDEX idx_val(val)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db_case' OR DEFAULT_CHARACTER_SET_NAME LIKE 'utf8%'; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_case' AND (TABLE_NAME = 'T1' OR TABLE_NAME = 't1') ORDER BY TABLE_NAME; DROP TABLE db_case.t1; DROP TABLE db_case.T1; DROP DATABASE db_case;",
+      "sql": "CREATE DATABASE dbT CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE dbT.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbT.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbT' AND DEFAULT_COLLATION_NAME = 'latin1_swedish_ci'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbT' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbT.t2; DROP TABLE dbT.t1; DROP DATABASE dbT;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_special CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_special.t1 (id INT PRIMARY KEY, name VARCHAR(30) CHARACTER SET utf8); CREATE TABLE db_special.t2 (id INT, val VARCHAR(20) CHARACTER SET latin1, INDEX idx_val(val)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db_special' OR DEFAULT_CHARACTER_SET_NAME IN ('utf8mb4','latin1'); SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_COLLATION FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_special' OR TABLE_COLLATION LIKE 'utf8%' ORDER BY TABLE_NAME; DROP TABLE db_special.t2; DROP TABLE db_special.t1; DROP DATABASE db_special;",
+      "sql": "CREATE DATABASE dbU CHARACTER SET utf8 COLLATE utf8_general_ci; CREATE TABLE dbU.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbU.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbU' AND DEFAULT_CHARACTER_SET_NAME = 'utf8'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbU' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbU.t2; DROP TABLE dbU.t1; DROP DATABASE dbU;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_complex CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_complex.t1 (id INT PRIMARY KEY, name VARCHAR(30), created_at DATETIME); CREATE TABLE db_complex.t2 (id INT, val DECIMAL(10,2), INDEX idx_val(val)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db_complex' OR DEFAULT_COLLATION_NAME \u003c\u003e 'utf8mb4_bin'; SELECT TABLE_SCHEMA, TABLE_NAME, ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_complex' OR ENGINE IS NULL ORDER BY TABLE_NAME; DROP TABLE db_complex.t2; DROP TABLE db_complex.t1; DROP DATABASE db_complex;",
+      "sql": "CREATE DATABASE dbV CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbV.t1 (id INT, name VARCHAR(30)); CREATE TABLE dbV.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbV' AND DEFAULT_COLLATION_NAME = 'utf8mb4_bin'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbV' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbV.t2; DROP TABLE dbV.t1; DROP DATABASE dbV;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE db_multi CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_multi.items (id INT PRIMARY KEY, name VARCHAR(30), price DECIMAL(10,2)); CREATE TABLE db_multi.orders (id INT, item_id INT, qty INT, INDEX idx_item(item_id)); SELECT SCHEMA_NAME, SQL_PATH FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db_multi' OR SQL_PATH IS NOT NULL; SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_multi' OR TABLE_ROWS \u003e 0 ORDER BY TABLE_NAME; DROP TABLE db_multi.orders; DROP TABLE db_multi.items; DROP DATABASE db_multi;",
-      "args": null,
-      "pass": false,
-      "known": false,
-      "comment": ""
-    },
-    {
-      "sql": "CREATE DATABASE db_types CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_types.t1 (id INT PRIMARY KEY, flag BOOLEAN, ratio FLOAT); CREATE TABLE db_types.t2 (id INT, dt DATE, ts TIMESTAMP, INDEX idx_dt(dt)); SELECT SCHEMA_NAME, DEFAULT_ENCRYPTION FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db_types' OR DEFAULT_ENCRYPTION = 'NO'; SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_types' OR CREATE_OPTIONS LIKE '%stats%' ORDER BY TABLE_NAME; DROP TABLE db_types.t2; DROP TABLE db_types.t1; DROP DATABASE db_types;",
+      "sql": "CREATE DATABASE dbW CHARACTER SET latin1 COLLATE latin1_general_ci; CREATE TABLE dbW.t1 (id INT, name VARCHAR(30); CREATE TABLE dbW.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'dbW' AND DEFAULT_CHARACTER_SET_NAME = 'latin1'; SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'dbW' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE dbW.t2; DROP TABLE dbW.t1; DROP DATABASE dbW;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     }
   ],
-  "|": [
+  "in": [
     {
-      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(20)); CREATE TABLE db2.t2 (id INT, val VARCHAR(10)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'db1' | SCHEMA_NAME = 'db2'; DROP TABLE db1.t1; DROP TABLE db2.t2; DROP DATABASE db1; DROP DATABASE db2;",
+      "sql": "CREATE DATABASE dbA DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE dbB CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE dbA.t1 (id INT PRIMARY KEY, name VARCHAR(30) NOT NULL, status ENUM('a','b','c') DEFAULT 'a', created_at DATETIME); CREATE TABLE dbA.t2 (col1 INT, col2 VARCHAR(20), INDEX idx_col2(col2)); CREATE TABLE dbB.x1 (x INT, y VARCHAR(10), INDEX idx_y(y)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbA', 'dbB'); SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbA','dbB') AND TABLE_NAME IN ('t1', 'x1') ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE dbB.x1; DROP TABLE dbA.t2; DROP TABLE dbA.t1; DROP DATABASE dbB; DROP DATABASE dbA;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_db1; CREATE DATABASE test_db2; CREATE TABLE test_db1.t1 (id INT); CREATE TABLE test_db2.t2 (id INT); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE 'test_db%' | TABLE_NAME = 't1'; DROP TABLE test_db1.t1; DROP TABLE test_db2.t2; DROP DATABASE test_db1; DROP DATABASE test_db2;",
+      "sql": "CREATE DATABASE MixedCase CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; CREATE TABLE MixedCase.TCase (A INT, B VARCHAR(15), C DATETIME, INDEX idx_b(B)); CREATE TABLE MixedCase.tcase2 (x INT PRIMARY KEY, y VARCHAR(5)); SELECT SCHEMA_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('MixedCase'); SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_ROWS, AVG_ROW_LENGTH FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('MixedCase') AND TABLE_NAME IN ('TCase', 'tcase2') ORDER BY TABLE_NAME DESC; DROP TABLE MixedCase.tcase2; DROP TABLE MixedCase.TCase; DROP DATABASE MixedCase;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE dbA CHARACTER SET utf8mb4; CREATE DATABASE dbB CHARACTER SET latin1; CREATE TABLE dbA.a1 (id INT); CREATE TABLE dbB.b1 (id INT); SELECT DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE DEFAULT_CHARACTER_SET_NAME = 'utf8mb4' | DEFAULT_CHARACTER_SET_NAME = 'latin1'; DROP TABLE dbA.a1; DROP TABLE dbB.b1; DROP DATABASE dbA; DROP DATABASE dbB;",
+      "sql": "CREATE DATABASE dbNums CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbNums.n1 (n INT PRIMARY KEY, v VARCHAR(10)); CREATE TABLE dbNums.n2 (n INT, v VARCHAR(10), INDEX idx_v(v)); CREATE TABLE dbNums.n3 (n INT, v VARCHAR(10), INDEX idx_v2(v(5))); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbNums'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbNums') AND TABLE_NAME IN ('n1', 'n2', 'n3') ORDER BY TABLE_NAME; DROP TABLE dbNums.n3; DROP TABLE dbNums.n2; DROP TABLE dbNums.n1; DROP DATABASE dbNums;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE mixed_case CHARACTER SET utf8mb4; CREATE TABLE mixed_case.Table1 (id INT); CREATE TABLE mixed_case.table2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME = 'Table1' | TABLE_NAME = 'table2'; DROP TABLE mixed_case.Table1; DROP TABLE mixed_case.table2; DROP DATABASE mixed_case;",
+      "sql": "CREATE DATABASE uni_db CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE TABLE uni_db.u1 (id INT, txt NVARCHAR(20), PRIMARY KEY(id)); CREATE TABLE uni_db.u2 (id INT, val VARCHAR(20) CHARACTER SET latin1, INDEX idx_val(val)); SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('uni_db'); SELECT TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('uni_db') AND TABLE_NAME IN ('u1','u2') ORDER BY TABLE_NAME; DROP TABLE uni_db.u2; DROP TABLE uni_db.u1; DROP DATABASE uni_db;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE numbers; CREATE TABLE numbers.n1 (id INT); CREATE TABLE numbers.n2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME = 'n1' | TABLE_NAME LIKE 'n%'; DROP TABLE numbers.n1; DROP TABLE numbers.n2; DROP DATABASE numbers;",
+      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE DATABASE db2 CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE db1.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE db1.t2 (id INT, name VARCHAR(30)); CREATE TABLE db2.t1 (id INT PRIMARY KEY, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('db1', 'db2'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('db1', 'db2') AND TABLE_NAME IN ('t1', 't2') ORDER BY TABLE_SCHEMA, TABLE_NAME; DROP TABLE db2.t1; DROP TABLE db1.t2; DROP TABLE db1.t1; DROP DATABASE db2; DROP DATABASE db1;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE special_chars CHARACTER SET utf8mb4; CREATE TABLE special_chars.`table-1` (id INT); CREATE TABLE special_chars.`table_2` (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME = 'table-1' | TABLE_NAME = 'table_2'; DROP TABLE special_chars.`table-1`; DROP TABLE special_chars.`table_2`; DROP DATABASE special_chars;",
+      "sql": "CREATE DATABASE dbA DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbA.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbA.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbA'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbA') AND TABLE_NAME IN ('t1', 't2') ORDER BY TABLE_NAME; DROP TABLE dbA.t2; DROP TABLE dbA.t1; DROP DATABASE dbA;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE empty_test; CREATE TABLE empty_test.t1 (id INT); SELECT TABLE_SCHEMA FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'does_not_exist' | TABLE_SCHEMA = 'empty_test'; DROP TABLE empty_test.t1; DROP DATABASE empty_test;",
+      "sql": "CREATE DATABASE dbB CHARACTER SET latin1 COLLATE latin1_swedish_ci; CREATE TABLE dbB.x1 (x INT PRIMARY KEY, y VARCHAR(10)); CREATE TABLE dbB.x2 (x INT, y VARCHAR(10)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbB'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbB') AND TABLE_NAME IN ('x1', 'x2') ORDER BY TABLE_NAME; DROP TABLE dbB.x2; DROP TABLE dbB.x1; DROP DATABASE dbB;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE long_names CHARACTER SET utf8mb4; CREATE TABLE long_names.very_long_table_name_1234567890 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME = 'very_long_table_name_1234567890' | TABLE_NAME LIKE 'very_%'; DROP TABLE long_names.very_long_table_name_1234567890; DROP DATABASE long_names;",
+      "sql": "CREATE DATABASE dbC CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbC.c1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbC.c2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbC'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbC') AND TABLE_NAME IN ('c1', 'c2') ORDER BY TABLE_NAME; DROP TABLE dbC.c2; DROP TABLE dbC.c1; DROP DATABASE dbC;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE multi_schema; CREATE SCHEMA schema1; CREATE SCHEMA schema2; CREATE TABLE multi_schema.t1 (id INT); CREATE TABLE schema1.t1 (id INT); CREATE TABLE schema2.t1 (id INT); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'multi_schema' | SCHEMA_NAME LIKE 'schema%'; DROP TABLE multi_schema.t1; DROP TABLE schema1.t1; DROP TABLE schema2.t1; DROP SCHEMA schema1; DROP SCHEMA schema2; DROP DATABASE multi_schema;",
+      "sql": "CREATE DATABASE dbD CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbD.d1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbD.d2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbD'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbD') AND TABLE_NAME IN ('d1', 'd2') ORDER BY TABLE_NAME; DROP TABLE dbD.d2; DROP TABLE dbD.d1; DROP DATABASE dbD;",
       "args": null,
       "pass": false,
       "known": false,
       "comment": ""
     },
     {
-      "sql": "CREATE DATABASE test_null; CREATE TABLE test_null.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME IS NULL | TABLE_NAME = 't1'; DROP TABLE test_null.t1; DROP DATABASE test_null;",
+      "sql": "CREATE DATABASE dbE CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbE.e1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbE.e2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbE'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbE') AND TABLE_NAME IN ('e1', 'e2') ORDER BY TABLE_NAME; DROP TABLE dbE.e2; DROP TABLE dbE.e1; DROP DATABASE dbE;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbF CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbF.f1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbF.f2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbF'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbF') AND TABLE_NAME IN ('f1', 'f2') ORDER BY TABLE_NAME; DROP TABLE dbF.f2; DROP TABLE dbF.f1; DROP DATABASE dbF;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbG CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbG.g1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbG.g2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbG'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbG') AND TABLE_NAME IN ('g1', 'g2') ORDER BY TABLE_NAME; DROP TABLE dbG.g2; DROP TABLE dbG.g1; DROP DATABASE dbG;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbH CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbH.h1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbH.h2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbH'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbH') AND TABLE_NAME IN ('h1', 'h2') ORDER BY TABLE_NAME; DROP TABLE dbH.h2; DROP TABLE dbH.h1; DROP DATABASE dbH;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbI CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbI.i1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbI.i2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbI'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbI') AND TABLE_NAME IN ('i1', 'i2') ORDER BY TABLE_NAME; DROP TABLE dbI.i2; DROP TABLE dbI.i1; DROP DATABASE dbI;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbJ CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbJ.j1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbJ.j2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbJ'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbJ') AND TABLE_NAME IN ('j1', 'j2') ORDER BY TABLE_NAME; DROP TABLE dbJ.j2; DROP TABLE dbJ.j1; DROP DATABASE dbJ;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbK CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbK.k1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbK.k2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbK'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbK') AND TABLE_NAME IN ('k1', 'k2') ORDER BY TABLE_NAME; DROP TABLE dbK.k2; DROP TABLE dbK.k1; DROP DATABASE dbK;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbL CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbL.l1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbL.l2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbL'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbL') AND TABLE_NAME IN ('l1', 'l2') ORDER BY TABLE_NAME; DROP TABLE dbL.l2; DROP TABLE dbL.l1; DROP DATABASE dbL;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbM CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbM.m1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbM.m2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbM'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbM') AND TABLE_NAME IN ('m1', 'm2') ORDER BY TABLE_NAME; DROP TABLE dbM.m2; DROP TABLE dbM.m1; DROP DATABASE dbM;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbN CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbN.n1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbN.n2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbN'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbN') AND TABLE_NAME IN ('n1', 'n2') ORDER BY TABLE_NAME; DROP TABLE dbN.n2; DROP TABLE dbN.n1; DROP DATABASE dbN;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbO.o1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbO.o2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbO'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbO') AND TABLE_NAME IN ('o1', 'o2') ORDER BY TABLE_NAME; DROP TABLE dbO.o2; DROP TABLE dbO.o1; DROP DATABASE dbO;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbP CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbP.p1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbP.p2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbP'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbP') AND TABLE_NAME IN ('p1', 'p2') ORDER BY TABLE_NAME; DROP TABLE dbP.p2; DROP TABLE dbP.p1; DROP DATABASE dbP;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbQ CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbQ.q1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbQ.q2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbQ'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbQ') AND TABLE_NAME IN ('q1', 'q2') ORDER BY TABLE_NAME; DROP TABLE dbQ.q2; DROP TABLE dbQ.q1; DROP DATABASE dbQ;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbR CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbR.r1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbR.r2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbR'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbR') AND TABLE_NAME IN ('r1', 'r2') ORDER BY TABLE_NAME; DROP TABLE dbR.r2; DROP TABLE dbR.r1; DROP DATABASE dbR;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbS CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbS.s1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbS.s2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbS'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbS') AND TABLE_NAME IN ('s1', 's2') ORDER BY TABLE_NAME; DROP TABLE dbS.s2; DROP TABLE dbS.s1; DROP DATABASE dbS;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbT.t1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbT.t2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbT'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbT') AND TABLE_NAME IN ('t1', 't2') ORDER BY TABLE_NAME; DROP TABLE dbT.t2; DROP TABLE dbT.t1; DROP DATABASE dbT;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbU CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbU.u1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbU.u2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbU'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbU') AND TABLE_NAME IN ('u1', 'u2') ORDER BY TABLE_NAME; DROP TABLE dbU.u2; DROP TABLE dbU.u1; DROP DATABASE dbU;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbV CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbV.v1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbV.v2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbV'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbV') AND TABLE_NAME IN ('v1', 'v2') ORDER BY TABLE_NAME; DROP TABLE dbV.v2; DROP TABLE dbV.v1; DROP DATABASE dbV;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbW CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbW.w1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbW.w2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbW'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbW') AND TABLE_NAME IN ('w1', 'w2') ORDER BY TABLE_NAME; DROP TABLE dbW.w2; DROP TABLE dbW.w1; DROP DATABASE dbW;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbX CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbX.x1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbX.x2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbX'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbX') AND TABLE_NAME IN ('x1', 'x2') ORDER BY TABLE_NAME; DROP TABLE dbX.x2; DROP TABLE dbX.x1; DROP DATABASE dbX;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbY CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbY.y1 (id INT PRIMARY KEY, name VARCHAR(30); CREATE TABLE dbY.y2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbY'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbY') AND TABLE_NAME IN ('y1', 'y2') ORDER BY TABLE_NAME; DROP TABLE dbY.y2; DROP TABLE dbY.y1; DROP DATABASE dbY;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbZ CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE dbZ.z1 (id INT PRIMARY KEY, name VARCHAR(30)); CREATE TABLE dbZ.z2 (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dbZ'); SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('dbZ') AND TABLE_NAME IN ('z1', 'z2') ORDER BY TABLE_NAME; DROP TABLE dbZ.z2; DROP TABLE dbZ.z1; DROP DATABASE dbZ;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    }
+  ],
+  "like": [
+    {
+      "sql": "CREATE DATABASE db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db1.t1 (id INT, name VARCHAR(20)); CREATE TABLE db1.t2 (id INT, description TEXT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db1' AND TABLE_NAME LIKE 't%'; DROP TABLE db1.t1; DROP TABLE db1.t2; DROP DATABASE db1;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE test_db DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci; CREATE TABLE test_db.products (id INT, name VARCHAR(30)); CREATE TABLE test_db.customers (id INT, name VARCHAR(30)); SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'test%'; DROP TABLE test_db.products; DROP TABLE test_db.customers; DROP DATABASE test_db;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE dbA CHARACTER SET utf8mb4; CREATE DATABASE dbB CHARACTER SET utf8mb4; SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'db_' ORDER BY SCHEMA_NAME; DROP DATABASE dbA; DROP DATABASE dbB;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE sample CHARACTER SET utf8 COLLATE utf8_general_ci; CREATE TABLE sample.tbl1 (id INT); CREATE TABLE sample.tbl2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'sample' AND TABLE_NAME LIKE 'tbl_'; DROP TABLE sample.tbl1; DROP TABLE sample.tbl2; DROP DATABASE sample;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_special CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_special.t1 (id INT); CREATE TABLE db_special.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_special' AND TABLE_NAME LIKE 't_' ORDER BY TABLE_NAME; DROP TABLE db_special.t1; DROP TABLE db_special.t2; DROP DATABASE db_special;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE mixed_case CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE mixed_case.Table1 (id INT); CREATE TABLE mixed_case.table2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'mixed_case' AND TABLE_NAME LIKE 'Table%'; DROP TABLE mixed_case.Table1; DROP TABLE mixed_case.table2; DROP DATABASE mixed_case;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_numbers CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_numbers.t1 (id INT); CREATE TABLE db_numbers.t2 (id INT); CREATE TABLE db_numbers.t3 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_numbers' AND TABLE_NAME LIKE 't%' ORDER BY TABLE_NAME; DROP TABLE db_numbers.t1; DROP TABLE db_numbers.t2; DROP TABLE db_numbers.t3; DROP DATABASE db_numbers;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE long_names CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE long_names.very_long_table_name_1 (id INT); CREATE TABLE long_names.very_long_table_name_2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'long_names' AND TABLE_NAME LIKE 'very%' ORDER BY TABLE_NAME; DROP TABLE long_names.very_long_table_name_1; DROP TABLE long_names.very_long_table_name_2; DROP DATABASE long_names;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE special_chars CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE special_chars.t1 (id INT); CREATE TABLE special_chars.t2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'special_chars' AND TABLE_NAME LIKE 't%' ESCAPE '\\'; DROP TABLE special_chars.t1; DROP TABLE special_chars.t2; DROP DATABASE special_chars;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE empty_db CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'empty_db' AND TABLE_NAME LIKE '%'; DROP DATABASE empty_db;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_with_null CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_with_null.t1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA LIKE NULL AND TABLE_NAME LIKE '%'; DROP TABLE db_with_null.t1; DROP DATABASE db_with_null;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_prefix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_prefix.prefix_table (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_prefix' AND TABLE_NAME LIKE 'prefix%'; DROP TABLE db_prefix.prefix_table; DROP DATABASE db_prefix;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_suffix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_suffix.table_suffix (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_suffix' AND TABLE_NAME LIKE '%suffix'; DROP TABLE db_suffix.table_suffix; DROP DATABASE db_suffix;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_middle CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_middle.table_middle_1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_middle' AND TABLE_NAME LIKE '%middle%'; DROP TABLE db_middle.table_middle_1; DROP DATABASE db_middle;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE multi_match CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE multi_match.match1 (id INT); CREATE TABLE multi_match.match2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'multi_match' AND TABLE_NAME LIKE 'match%' ORDER BY TABLE_NAME; DROP TABLE multi_match.match1; DROP TABLE multi_match.match2; DROP DATABASE multi_match;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE case_sensitive CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE case_sensitive.Table1 (id INT); CREATE TABLE case_sensitive.table1 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'case_sensitive' AND TABLE_NAME LIKE 'Table%'; DROP TABLE case_sensitive.Table1; DROP TABLE case_sensitive.table1; DROP DATABASE case_sensitive;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_underscore CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_underscore.t_1 (id INT); CREATE TABLE db_underscore.t_2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_underscore' AND TABLE_NAME LIKE 't\\_%' ESCAPE '\\'; DROP TABLE db_underscore.t_1; DROP TABLE db_underscore.t_2; DROP DATABASE db_underscore;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_percent CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_percent.t%1 (id INT); CREATE TABLE db_percent.t%2 (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_percent' AND TABLE_NAME LIKE 't\\%%' ESCAPE '\\'; DROP TABLE db_percent.t%1; DROP TABLE db_percent.t%2; DROP DATABASE db_percent;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_numbers_only CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_numbers_only.1table (id INT); CREATE TABLE db_numbers_only.2table (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_numbers_only' AND TABLE_NAME LIKE '_table'; DROP TABLE db_numbers_only.1table; DROP TABLE db_numbers_only.2table; DROP DATABASE db_numbers_only;",
+      "args": null,
+      "pass": false,
+      "known": false,
+      "comment": ""
+    },
+    {
+      "sql": "CREATE DATABASE db_mixed_pattern CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE TABLE db_mixed_pattern.t1a (id INT); CREATE TABLE db_mixed_pattern.t2b (id INT); SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'db_mixed_pattern' AND TABLE_NAME LIKE 't_d' ESCAPE '\\'; DROP TABLE db_mixed_pattern.t1a; DROP TABLE db_mixed_pattern.t2b; DROP DATABASE db_mixed_pattern;",
       "args": null,
       "pass": false,
       "known": false,
